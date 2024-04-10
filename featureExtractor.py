@@ -14,7 +14,7 @@ from nltk.corpus import wordnet
 
 #likely will need a better library. 
 
-# TODO: Add the reviews section to get the reviews
+# TODO: Wayne: Add the reviews section to get the reviews
 # Code adapted from here: https://npogeant.medium.com/python-letterboxd-build-a-content-filtering-rec-sys-from-scratch-7648b25bccdc
 async def fetch(url, session, input_data={}):
     async with session.get(url) as r:
@@ -73,7 +73,7 @@ def extract_descriptive_words(sentence:str):
     blob = TextBlob(sentence)
     return [ word for (word,tag) in blob.tags if tag == "JJ"]
 
-
+#AI group:ignore below
 def constructFeature(sentence:str):
     vectors = {}
     adjectives = extract_descriptive_words(sentence)
