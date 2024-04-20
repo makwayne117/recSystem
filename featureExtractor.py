@@ -98,6 +98,7 @@ def generateReviewModel(title:str, sentence:str):
 
     return {"aspect":title, "category":"film quality", "review sentence": sentence, "sentic info":senticVectors}
 
+#TODO: Austin, put in summary. the function should have one parameter that takes in the score and
 
 
 
