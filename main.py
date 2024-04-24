@@ -32,22 +32,8 @@ def return_reviews():
 data = return_reviews()
 
 #split data into training and validation
-#DELETE EVERYTHING BELOW
-random.shuffle(data)  # Shuffle for a more realistic training scenario
-
-# Split data into training and validation sets
-split_index = int(len(data) * 0.8)
-train_data = data[:split_index]
-validation_data = data[split_index:]
-
-# Define parameters
-num_epochs = 10
-learning_rate = 0.01
-
-# Train the predictor
-weights = learnPredictor(train_data, validation_data, extractWordFeatures, num_epochs, learning_rate)
-
-print("Learned weights:", weights)
+#run the trainiing weights.
+#test the weights with a test review to see if it's positive, negative, etc. 
 
 
     #print(data.head())
