@@ -33,6 +33,7 @@ def return_reviews():
 data = return_reviews()
 
 #TODO: all the steps below
+#for feature vectors, get adjectives with some sort of ml package
 #shuffle data
 #split data into training and validation
 #run the trainiing weights.
