@@ -17,6 +17,7 @@ def return_reviews():
 
     sentiment_values = []
 
+    #TODO: turn this into a df as well
     for s in sentiments:
         if s == 'positive':
             sentiment_values.append(1)
@@ -31,6 +32,8 @@ def return_reviews():
 
 data = return_reviews()
 
+#TODO: all the steps below
+#shuffle data
 #split data into training and validation
 #run the trainiing weights.
 #test the weights with a test review to see if it's positive, negative, etc. 
