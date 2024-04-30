@@ -1,43 +1,37 @@
-#we want three users to try this out on
-
-from letterboxdpy import user
-from letterboxdpy import movie
-import requests 
-from bs4 import BeautifulSoup 
-import sqlite3
-import pandas as pd
-
 from SGD import *
 
-def return_reviews():
-    path = "IMDB Dataset.csv"
-    data = pd.read_csv(path)
-    reviews = data['review']
-    sentiments = data['sentiment']
+import requests 
+import pandas as pd
+import numpy as np
 
-    sentiment_values = []
+df = pd.read_csv('IMDB Dataset.csv')
 
-    #TODO: turn this into a df as well
-    for s in sentiments:
-        if s == 'positive':
-            sentiment_values.append(1)
-        else:
-            sentiment_values.append(0)
-        
+df['sentiment'] = df['sentiment'].replace({'positive': 1, 'negative': 0})
 
-    #print(reviews)
-    print(sentiments)
+df['review'] = df['review'].str.replace("isn't", 'is not')
 
-    return list(zip(reviews,sentiment_values))
+negation = {'not good': 'notgood', 'not bad': 'notbad', 'not great': 'notgreat'}
+df['review'] = df['review'].replace(negation, regex=True)
 
-data = return_reviews()
+features = ['good', 'bad', 'amazing', 'okay', 'terrible', 'solid', 'poor', 'decent', 
+            'great', 'notgood', 'notbad', 'notgreat']
 
-#TODO: all the steps below
-#for feature vectors, get adjectives with some sort of ml package
-#shuffle data
-#split data into training and validation
-#run the trainiing weights.
-#test the weights with a test review to see if it's positive, negative, etc. 
+feature_vector = pd.DataFrame()
+
+for feature in features:
+    feature_vector[feature] = df['review'].str.count(feature)
+
+target = df['sentiment']
+
+np.random.seed(42) 
+mask = np.random.rand(len(df)) < 0.7
+train_data = feature_vector[mask]
+test_data = feature_vector[~mask]
+train_labels = target[mask]
+test_labels = target[~mask]
 
 
-    #print(data.head())
+X_train = train_data.values
+y_train = train_labels.values
+X_test = test_data.values
+y_test = test_labels.values
