@@ -35,3 +35,33 @@ X_train = train_data.values
 y_train = train_labels.values
 X_test = test_data.values
 y_test = test_labels.values
+
+num_features = X_train.shape[1]
+weights = np.zeros(num_features)
+bias = 0.0
+learning_rate = 0.01
+epochs = 200
+
+#sgd
+for epoch in range(epochs):
+    for i in range(len(X_train)):
+        xi = X_train[i]
+        yi = y_train[i]
+        prediction = np.dot(weights, xi) + bias
+        if yi * prediction < 1:
+            gradient_w = -yi * xi
+            gradient_b = -yi
+            weights -= learning_rate * gradient_w
+            bias -= learning_rate * gradient_b
+        else:
+            gradient_w = 0
+            gradient_b = 0
+
+train_predictions = np.dot(X_train, weights) + bias
+test_predictions = np.dot(X_test, weights) + bias
+
+train_accuracy = np.mean(np.sign(train_predictions) == y_train)
+test_accuracy = np.mean(np.sign(test_predictions) == y_test)
+
+print("Final Train Accuracy:", train_accuracy)
+print("Final Test Accuracy:", test_accuracy)
