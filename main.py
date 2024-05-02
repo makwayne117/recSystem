@@ -13,8 +13,9 @@ df['review'] = df['review'].str.replace("isn't", 'is not')
 negation = {'not good': 'notgood', 'not bad': 'notbad', 'not great': 'notgreat'}
 df['review'] = df['review'].replace(negation, regex=True)
 
-features = ['good', 'bad', 'amazing', 'okay', 'terrible', 'solid', 'poor', 'decent', 
-            'great', 'notgood', 'notbad', 'notgreat']
+features = ['good', 'bad','amazing', 'okay', 'terrible', 'solid', 'poor', 'decent', 
+            'great', 'notgood', 'notbad', 'notgreat', 'not', 'awful', 'amazing', 'new', 'favorite', 
+            'worst', 'plot', 'masterpiece', 'after', 'like', 'average', 'could', 'gripping', 'too', 'but']
 
 feature_vector = pd.DataFrame()
 
@@ -41,6 +42,7 @@ weights = np.zeros(num_features)
 bias = 0.0
 learning_rate = 0.01
 epochs = 200
+
 
 #sgd
 for epoch in range(epochs):
