@@ -1,7 +1,7 @@
 import requests 
 import pandas as pd
 import numpy as np
-
+import os
 from flask import Flask, request, render_template
 
 app = Flask("Text Labeler")
@@ -99,4 +99,6 @@ def index():
 
     return render_template('index.html', result=None)
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))  # Default to 5000 if PORT not set
+    app.run(host='0.0.0.0', port=port)
