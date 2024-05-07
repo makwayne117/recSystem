@@ -87,13 +87,22 @@ def index():
         feature_vector = pd.DataFrame([feature_counts])
 
         get_score = np.dot(feature_vector, weights) + bias
-
-        if get_score[0] > 0:
-            result = f"Final Result: {get_score[0]}, sounds like this text is positive"
-        elif get_score[0] < 0:
-            result = f"Final Result: {get_score[0]}, sounds like this text is negative"
+        score = get_score[0]
+        if score > 0:
+            if score >= 1:
+                score = 10
+            else: 
+                score = 5 + score * 5
+            result = f"Final Result: {score}, sounds like this text is positive"
+        elif score < 0:
+            if score <= 1:
+                score = 0
+            else: 
+                score = 5 - score * 5
+            result = f"Final Result: {score}, sounds like this text is negative"
         else:
-            result = f"Final Result: {get_score[0]}, sounds like this text is neutral"
+            score = 5
+            result = f"Final Result: {score}, sounds like this text is neutral"
 
         return render_template('index.html', result=result)
 
