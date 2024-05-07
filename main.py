@@ -2,6 +2,11 @@ import requests
 import pandas as pd
 import numpy as np
 
+from flask import Flask, request, render_template
+
+app = Flask("Text Labeler")
+
+
 df = pd.read_csv('IMDB Dataset.csv')
 
 df['sentiment'] = df['sentiment'].replace({'positive': 1, 'negative': -1})
@@ -20,13 +25,17 @@ features = ['good', 'bad','amazing', 'okay', 'terrible', 'solid', 'poor', 'decen
             'wonderful', 'how', 'most', 'one', 'garbage', 'fan', 'big', 'just', 'enjoyed', 'liked', 'laughed',
             'boring', 'tried', 'tries', 'joke', 'maybe', 'horrible', 'best', 'well', 'outstanding', 'bored']
 
+
+
+mask = np.random.rand(len(df)) < 0.7
+
 feature_vector = pd.DataFrame()
 
 for feature in features:
     feature_vector[feature] = df['review'].str.count(feature)
 
 np.random.seed(42) 
-mask = np.random.rand(len(df)) < 0.7
+
 train_data = feature_vector[mask]
 test_data = feature_vector[~mask]
 train_labels = target[mask]
@@ -68,3 +77,26 @@ test_accuracy = np.mean(np.sign(test_predictions) == y_test)
 
 print("Final Train Accuracy:", train_accuracy)
 print("Final Test Accuracy:", test_accuracy)
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        user_review = request.form['review']
+
+        feature_counts = {feature: user_review.count(feature) for feature in features}
+        feature_vector = pd.DataFrame([feature_counts])
+
+        get_score = np.dot(feature_vector, weights) + bias
+
+        if get_score[0] > 0:
+            result = f"Final Result: {get_score[0]}, sounds like this text is positive"
+        elif get_score[0] < 0:
+            result = f"Final Result: {get_score[0]}, sounds like this text is negative"
+        else:
+            result = f"Final Result: {get_score[0]}, sounds like this text is neutral"
+
+        return render_template('index.html', result=result)
+
+    return render_template('index.html', result=None)
+if __name__ == '__main__':
+    app.run(debug=True)
