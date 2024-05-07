@@ -1,28 +1,29 @@
-from SGD import *
-
 import requests 
 import pandas as pd
 import numpy as np
 
 df = pd.read_csv('IMDB Dataset.csv')
 
-df['sentiment'] = df['sentiment'].replace({'positive': 1, 'negative': 0})
+df['sentiment'] = df['sentiment'].replace({'positive': 1, 'negative': -1})
 
-df['review'] = df['review'].str.replace("isn't", 'is not')
-
+apostrophe = {"isn't": 'is not', "don't": 'do not', "can't": 'can not', "cannot": 'can not'}
 negation = {'not good': 'notgood', 'not bad': 'notbad', 'not great': 'notgreat'}
+
+df['review'] = df['review'].replace(apostrophe, regex=True)
 df['review'] = df['review'].replace(negation, regex=True)
+
+target = df['sentiment']
 
 features = ['good', 'bad','amazing', 'okay', 'terrible', 'solid', 'poor', 'decent', 
             'great', 'notgood', 'notbad', 'notgreat', 'not', 'awful', 'amazing', 'new', 'favorite', 
-            'worst', 'plot', 'masterpiece', 'after', 'like', 'average', 'could', 'gripping', 'too', 'but']
+            'worst', 'plot', 'masterpiece', 'after', 'like', 'average', 'could', 'gripping', 'too', 'but'
+            'wonderful', 'how', 'most', 'one', 'garbage', 'fan', 'big', 'just', 'enjoyed', 'liked', 'laughed',
+            'boring', 'tried', 'tries', 'joke', 'maybe', 'horrible', 'best', 'well', 'outstanding', 'bored']
 
 feature_vector = pd.DataFrame()
 
 for feature in features:
     feature_vector[feature] = df['review'].str.count(feature)
-
-target = df['sentiment']
 
 np.random.seed(42) 
 mask = np.random.rand(len(df)) < 0.7
@@ -40,7 +41,7 @@ y_test = test_labels.values
 num_features = X_train.shape[1]
 weights = np.zeros(num_features)
 bias = 0.0
-learning_rate = 0.01
+learning_rate = 0.002
 epochs = 200
 
 
